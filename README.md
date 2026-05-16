@@ -33,3 +33,21 @@ It detects objects from webcam feed and provides live voice feedback with spatia
 ```bash
 pip install Flask opencv-python ultralytics pyttsx3
 python app.py
+
+## 📸 Sample Outputs
+
+### Live Detection Demo
+
+![Demo 1](images/Sample 1.png)
+
+---
+
+### Region-based Object Detection
+
+![Demo 2](images/Sample 2.png)
+
+---
+
+### Live Caption + Spatial Awareness
+
+![Demo 3](images/Sample 3.png)
