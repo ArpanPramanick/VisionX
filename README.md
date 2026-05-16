@@ -38,16 +38,16 @@ python app.py
 
 ### Live Detection Demo
 
-![Demo 1](images/Sample 1.png)
+![Demo 1](images/demo1.png)
 
 ---
 
 ### Region-based Object Detection
 
-![Demo 2](images/Sample 2.png)
+![Demo 2](images/demo2.png)
 
 ---
 
 ### Live Caption + Spatial Awareness
 
-![Demo 3](images/Sample 3.png)
+![Demo 3](images/demo3.png)
