@@ -61,18 +61,19 @@ python app.py
 
 ## 📸 Sample Outputs
 
-### Live Detection Demo
+### Live Object Detection App UI (Dark Mode)
 
 <img src="images/demo1.png" width="850"/>
 
 <br><br>
 
-### Region-based Object Detection
+### Live Object Detection App UI (Light Mode)
 
 <img src="images/demo2.png" width="850"/>
 
 <br><br>
 
-### Live Caption + Spatial Awareness
+### Live Object Detection + Live Caption Sample Image
+
 
 <img src="images/demo3.png" width="850"/>
