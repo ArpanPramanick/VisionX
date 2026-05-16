@@ -1,0 +1,9 @@
+# Python environment and cache
+__pycache__/
+*.pyc
+venv/
+env/
+.env
+
+# Optional large model file
+# yolov8s.pt

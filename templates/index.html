@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionX - Live Object Detection</title>
+    <style>
+        :root {
+            /* Light Mode Variables */
+            --bg-color: #f4f7f6;
+            --text-color: #2d3748;
+            --card-bg: #ffffff;
+            --btn-start: #10b981;
+            --btn-start-hover: #059669;
+            --btn-stop: #ef4444;
+            --btn-stop-hover: #dc2626;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode Variables */
+            --bg-color: #1a202c;
+            --text-color: #f7fafc;
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header Styling */
+        .header {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 20px 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-1px);
+        }
+
+        /* Main Container */
+        .main-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Buttons */
+        .controls {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: transform 0.1s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-start { 
+            background-color: var(--btn-start); 
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+        }
+        .btn-start:hover { background-color: var(--btn-start-hover); }
+        
+        .btn-stop { 
+            background-color: var(--btn-stop); 
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+        }
+        .btn-stop:hover { background-color: var(--btn-stop-hover); }
+
+        /* Video Feed */
+        .video-container {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 640px;
+            aspect-ratio: 4/3;
+            background-color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-weight: 500;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 30px 20px;
+            font-size: 15px;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .footer span {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>VisionX</h1>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+    </div>
+    
+    <div class="main-card">
+        <div class="controls">
+            <button class="btn btn-start" onclick="startDetection()">Start Camera</button>
+            <button class="btn btn-stop" onclick="stopDetection()">Stop Camera</button>
+        </div>
+
+        <div class="video-container">
+            <img id="videoFeed" src="" alt="Camera is offline" style="display: none;" />
+            <span id="placeholderText">Camera is currently stopped.</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        Created by <span>Arpan</span>
+    </div>
+
+    <script>
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeBtn');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                // Switch to Light Mode
+                body.removeAttribute('data-theme');
+                themeBtn.textContent = '🌙 Dark Mode';
+                localStorage.setItem('visionx-theme', 'light');
+            } else {
+                // Switch to Dark Mode
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = '☀️ Light Mode';
+                localStorage.setItem('visionx-theme', 'dark');
+            }
+        }
+
+        // Check for saved user preference on load
+        window.onload = () => {
+            const savedTheme = localStorage.getItem('visionx-theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('themeBtn').textContent = '☀️ Light Mode';
+            }
+        };
+
+        // --- Camera Controls ---
+        function startDetection() {
+            fetch('/start_camera', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                const img = document.getElementById('videoFeed');
+                const placeholder = document.getElementById('placeholderText');
+                
+                // Timestamp prevents browser from caching the video stream
+                img.src = "/video_feed?" + new Date().getTime(); 
+                img.style.display = "block";
+                placeholder.style.display = "none";
+            })
+            .catch(error => console.error('Error starting camera:', error));
+        }
+
+        function stopDetection() {
+            fetch('/stop_camera', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                const img = document.getElementById('videoFeed');
+                const placeholder = document.getElementById('placeholderText');
+                
+                img.src = ""; // Clear the stream connection
+                img.style.display = "none";
+                placeholder.style.display = "block";
+            })
+            .catch(error => console.error('Error stopping camera:', error));
+        }
+    </script>
+</body>
+</html>
